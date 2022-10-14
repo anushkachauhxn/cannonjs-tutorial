@@ -1,10 +1,13 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
+import * as CANNON from "cannon-es";
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// Three JS Scene
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   45,
@@ -43,7 +46,16 @@ const groundMat = new THREE.MeshBasicMaterial({
 const groundMesh = new THREE.Mesh(groundGeo, groundMat);
 scene.add(groundMesh);
 
+// Cannon JS World
+const world = new CANNON.World({
+  gravity: new CANNON.Vec3(0, -9.81, 0), // Negative value: so bodies move towards the -ve y-axis, i.e. downwards
+});
+
+const timeStep = 1 / 60; // lowering this value increases precision, but at the cost of resource consumption
+
 function animate() {
+  world.step(timeStep);
+
   renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);
