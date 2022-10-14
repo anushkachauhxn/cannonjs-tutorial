@@ -51,6 +51,28 @@ const world = new CANNON.World({
   gravity: new CANNON.Vec3(0, -9.81, 0), // Negative value: so bodies move towards the -ve y-axis, i.e. downwards
 });
 
+// Cannon JS Bodies
+const groundBody = new CANNON.Body({
+  shape: new CANNON.Plane(),
+  type: CANNON.Body.STATIC, // means, mass: 0
+});
+world.addBody(groundBody);
+groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+
+const boxBody = new CANNON.Body({
+  mass: 1,
+  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
+  position: new CANNON.Vec3(1, 20, 0),
+});
+world.addBody(boxBody);
+
+const sphereBody = new CANNON.Body({
+  mass: 10,
+  shape: new CANNON.Sphere(2),
+  position: new CANNON.Vec3(0, 15, 0),
+});
+world.addBody(sphereBody);
+
 const timeStep = 1 / 60; // lowering this value increases precision, but at the cost of resource consumption
 
 function animate() {
