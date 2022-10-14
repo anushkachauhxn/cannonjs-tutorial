@@ -78,6 +78,15 @@ const timeStep = 1 / 60; // lowering this value increases precision, but at the 
 function animate() {
   world.step(timeStep);
 
+  groundMesh.position.copy(groundBody.position);
+  groundMesh.quaternion.copy(groundBody.quaternion);
+
+  boxMesh.position.copy(boxBody.position);
+  boxMesh.quaternion.copy(boxBody.quaternion);
+
+  sphereMesh.position.copy(sphereBody.position);
+  sphereMesh.quaternion.copy(sphereBody.quaternion);
+
   renderer.render(scene, camera);
 }
 renderer.setAnimationLoop(animate);
