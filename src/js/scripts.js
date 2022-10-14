@@ -65,6 +65,8 @@ const boxBody = new CANNON.Body({
   position: new CANNON.Vec3(1, 20, 0),
 });
 world.addBody(boxBody);
+boxBody.angularVelocity.set(0, 10, 0);
+boxBody.angularDamping = 0.5;
 
 const sphereBody = new CANNON.Body({
   mass: 10,
@@ -72,6 +74,7 @@ const sphereBody = new CANNON.Body({
   position: new CANNON.Vec3(0, 15, 0),
 });
 world.addBody(sphereBody);
+sphereBody.linearDamping = 0.31; // more affected by its mass and air resistance
 
 const timeStep = 1 / 60; // lowering this value increases precision, but at the cost of resource consumption
 
