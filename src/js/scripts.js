@@ -52,29 +52,51 @@ const world = new CANNON.World({
 });
 
 // Cannon JS Bodies
+const groundPhysMat = new CANNON.Material();
 const groundBody = new CANNON.Body({
-  shape: new CANNON.Plane(),
+  shape: new CANNON.Box(new CANNON.Vec3(15, 15, 0.1)),
   type: CANNON.Body.STATIC, // means, mass: 0
+  material: groundPhysMat,
 });
 world.addBody(groundBody);
 groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
 
+const boxPhysMat = new CANNON.Material();
 const boxBody = new CANNON.Body({
   mass: 1,
   shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
-  position: new CANNON.Vec3(1, 20, 0),
+  position: new CANNON.Vec3(5, 20, 0),
+  material: boxPhysMat,
 });
 world.addBody(boxBody);
 boxBody.angularVelocity.set(0, 10, 0);
 boxBody.angularDamping = 0.5;
 
+const spherePhysMat = new CANNON.Material();
 const sphereBody = new CANNON.Body({
   mass: 10,
   shape: new CANNON.Sphere(2),
   position: new CANNON.Vec3(0, 15, 0),
+  material: spherePhysMat,
 });
 world.addBody(sphereBody);
 sphereBody.linearDamping = 0.31; // more affected by its mass and air resistance
+
+// Cannon JS Contact Materials
+// Here, materials => to have more control over how bodies interact with each other
+const groundBoxContactMat = new CANNON.ContactMaterial(
+  groundPhysMat,
+  boxPhysMat,
+  { friction: 0 } // box will slide on the ground
+);
+world.addContactMaterial(groundBoxContactMat);
+
+const groundSphereContactMat = new CANNON.ContactMaterial(
+  groundPhysMat,
+  spherePhysMat,
+  { restitution: 0.9 } // sphere will bounce when it hits ground
+);
+world.addContactMaterial(groundSphereContactMat);
 
 const timeStep = 1 / 60; // lowering this value increases precision, but at the cost of resource consumption
 
